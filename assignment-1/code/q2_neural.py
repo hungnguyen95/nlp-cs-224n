@@ -40,17 +40,22 @@ def forward_backward_prop(X, labels, params, dimensions):
 
     # Note: compute cost based on `sum` not `mean`.
     ### YOUR CODE HERE: forward propagation
-    Z1 = np.dot(X, W1) + b1
-    A1 = sigmoid(Z1)
-    Z2 = np.dot(A1, W2) + b2
-    A2 = softmax(Z2)
+    Z1 = np.dot(X, W1) + b1 # M x H
+    A1 = sigmoid(Z1) # M x H
+    Z2 = np.dot(A1, W2) + b2 # M x Dy
+    A2 = softmax(Z2) # M x Dy
     cost = -np.log(A2)
     cost = np.sum(labels*cost)
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
     # raise NotImplementedError
-    d_A2 = 
+    d_Z2 = Z2 - labels
+    gradW1 = np.dot(A2.T, d_Z2)
+    gradb2 = np.sum(d_Z2, axis=0, keepdims=True)
+    d_Z1 = np.dot(d_Z2, W2.T) * sigmoid_grad(A1)
+    gradW2 = np.dot(A1.T, d_Z1)
+    gradb1 = np.sum(d_Z1, axis=0, keepdims=True)
     ### END YOUR CODE
 
     ### Stack gradients (do not modify)
@@ -71,7 +76,7 @@ def sanity_check():
     dimensions = [10, 5, 10]
     data = np.random.randn(N, dimensions[0])   # each row will be a datum
     labels = np.zeros((N, dimensions[2]))
-    for i in xrange(N):
+    for i in range(N):
         labels[i, random.randint(0,dimensions[2]-1)] = 1
 
     params = np.random.randn((dimensions[0] + 1) * dimensions[1] + (
@@ -90,10 +95,10 @@ def your_sanity_checks():
     """
     print("Running your sanity checks...")
     ### YOUR CODE HERE
-    raise NotImplementedError
+    # raise NotImplementedError
     ### END YOUR CODE
 
 
 if __name__ == "__main__":
     sanity_check()
-    your_sanity_checks()
+    # your_sanity_checks()
