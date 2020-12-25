@@ -50,11 +50,11 @@ def forward_backward_prop(X, labels, params, dimensions):
 
     ### YOUR CODE HERE: backward propagation
     # raise NotImplementedError
-    d_Z2 = Z2 - labels
-    gradW1 = np.dot(A2.T, d_Z2)
+    d_Z2 = A2 - labels
+    gradW2 = np.dot(A1.T, d_Z2)
     gradb2 = np.sum(d_Z2, axis=0, keepdims=True)
     d_Z1 = np.dot(d_Z2, W2.T) * sigmoid_grad(A1)
-    gradW2 = np.dot(A1.T, d_Z1)
+    gradW1 = np.dot(X.T, d_Z1)
     gradb1 = np.sum(d_Z1, axis=0, keepdims=True)
     ### END YOUR CODE
 
